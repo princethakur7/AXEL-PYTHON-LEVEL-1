@@ -1,29 +1,37 @@
-# TO-DO-LIST
+# ==========================================
+# Simple To-Do List App in Python
+# Using Functions
+# ==========================================
 
 # List to store all tasks
 tasks = []
 
+
 # Function to show menu
 def show_menu():
-    print("\n=============TO-DO LIST MENU")
+    print("\n====== TO-DO LIST MENU ======")
     print("1. Add Task")
-    print("2. View Task")
+    print("2. View Tasks")
     print("3. Edit Task")
     print("4. Remove Task")
     print("5. Mark Task as Done")
-    print("6. EXIT")
+    print("6. Exit")
+    print("=============================")
+
 
 # Function to add task
 def add_task():
     task = input("Enter task name: ")
-
+    
     # Each task will be stored as a dictionary
     task_data = {
-        "task":task,
-        "Done":False
+        "task": task,
+        "done": False
     }
+
     tasks.append(task_data)
     print("✅ Task added successfully!")
+
 
 # Function to view tasks
 def view_tasks():
@@ -37,23 +45,112 @@ def view_tasks():
 
     # Loop through tasks
     for index, task in enumerate(tasks):
+
         status = "✅ Done" if task["done"] else "❌ Pending"
+
         print(f"{index + 1}. {task['task']} --> {status}")
+
 
 # Function to edit task
 def edit_task():
+
     view_tasks()
 
-    if len(tasks)==0:
+    if len(tasks) == 0:
         return
-    try:
-        task_number = int(int("Enter task number to edit: "))
 
-        if 1 <= task_number <=len(tasks):
+    try:
+        task_number = int(input("Enter task number to edit: "))
+
+        if 1 <= task_number <= len(tasks):
+
             new_task = input("Enter new task name: ")
-            tasks[task_number-1]["task"]=new_task
+
+            tasks[task_number - 1]["task"] = new_task
+
             print("✏️ Task updated successfully!")
+
         else:
             print("Invalid task number.")
+
     except:
         print("Please enter a valid number.")
+
+
+# Function to remove task
+def remove_task():
+
+    view_tasks()
+
+    if len(tasks) == 0:
+        return
+
+    try:
+        task_number = int(input("Enter task number to remove: "))
+
+        if 1 <= task_number <= len(tasks):
+
+            removed = tasks.pop(task_number - 1)
+
+            print(f"🗑️ '{removed['task']}' removed successfully!")
+
+        else:
+            print("Invalid task number.")
+
+    except:
+        print("Please enter a valid number.")
+
+
+# Function to mark task as done
+def mark_done():
+
+    view_tasks()
+
+    if len(tasks) == 0:
+        return
+
+    try:
+        task_number = int(input("Enter task number to mark as done: "))
+
+        if 1 <= task_number <= len(tasks):
+
+            tasks[task_number - 1]["done"] = True
+
+            print("🎉 Task marked as done!")
+
+        else:
+            print("Invalid task number.")
+
+    except:
+        print("Please enter a valid number.")
+
+
+# Main program loop
+while True:
+
+    show_menu()
+
+    choice = input("Enter your choice: ")
+
+    # Calling functions based on user choice
+    if choice == "1":
+        add_task()
+
+    elif choice == "2":
+        view_tasks()
+
+    elif choice == "3":
+        edit_task()
+
+    elif choice == "4":
+        remove_task()
+
+    elif choice == "5":
+        mark_done()
+
+    elif choice == "6":
+        print("👋 Exiting To-Do List App...")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
