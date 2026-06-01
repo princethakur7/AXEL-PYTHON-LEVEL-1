@@ -1,0 +1,106 @@
+# Rock Paper Scissors Game in Python
+# Beginner Friendly Project
+# Concepts Used:
+# 1. Random Module
+# 2. Conditions
+# 3. Functions
+# 4. Loops
+# 5. Scoreboard
+
+import random
+
+# Function to get computer choice
+def get_computer_choice():
+    choices = ["rock", "paper", "scissors"]
+    return random.choice(choices)
+
+
+# Function to decide winner
+def decide_winner(user, computer):
+
+    # If both choices are same
+    if user == computer:
+        return "draw"
+
+    # Winning conditions for user
+    elif (
+        (user == "rock" and computer == "scissors") or
+        (user == "paper" and computer == "rock") or
+        (user == "scissors" and computer == "paper")
+    ):
+        return "user"
+
+    # Otherwise computer wins
+    else:
+        return "computer"
+
+
+# Function to play one round
+def play_round():
+
+    # Take user input
+    user_choice = input("Enter rock, paper, or scissors: ").lower()
+
+    # Validate input
+    if user_choice not in ["rock", "paper", "scissors"]:
+        print("Invalid choice! Please try again.")
+        return None
+
+    # Get computer choice
+    computer_choice = get_computer_choice()
+
+    print(f"\nYou chose: {user_choice}")
+    print(f"Computer chose: {computer_choice}")
+
+    # Decide winner
+    result = decide_winner(user_choice, computer_choice)
+
+    # Show result
+    if result == "draw":
+        print("It's a Draw!")
+
+    elif result == "user":
+        print("You Win!")
+
+    else:
+        print("Computer Wins!")
+
+    return result
+
+
+# Main function
+def main():
+
+    # Score variables
+    user_score = 0
+    computer_score = 0
+
+    print("=== Rock Paper Scissors Game ===")
+
+    # Game loop
+    while True:
+
+        result = play_round()
+
+        # Update scores
+        if result == "user":
+            user_score += 1
+
+        elif result == "computer":
+            computer_score += 1
+
+        # Show scoreboard
+        print("\n--- Scoreboard ---")
+        print(f"You: {user_score}")
+        print(f"Computer: {computer_score}")
+
+        # Ask to play again
+        play_again = input("\nDo you want to play again? (yes/no): ").lower()
+
+        if play_again != "yes":
+            print("\nThanks for playing!")
+            break
+
+
+# Run the game
+main()
