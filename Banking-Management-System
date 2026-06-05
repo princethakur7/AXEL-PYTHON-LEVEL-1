@@ -1,0 +1,117 @@
+# Banking Management System - Consumer
+
+# account details
+account_holder = "Prince Thakur"
+account_number = "1234567890"
+balance = 10000
+pin = "1234"
+
+# Transaction History List
+transactions = []
+
+#Login function
+def login():
+    global pin
+
+    attempts = 3
+
+    while attempts > 0:
+
+        entered_pin = input("Enter your 4-digit PIN: ")
+
+        if entered_pin == pin:
+            print("\nLogin Successful!")
+            return True
+        else:
+            attempts -=1
+            print(f"Incorrect PIN! Attempts Left: {attempts}")
+
+    print("\nAccount Locked!")
+    return False
+
+#account Details
+def account_details():
+    print("\n==== ACCOUNT DETAILS ====")
+    print(f"Account Holder : {account_holder}")
+    print(f"Account Number : {account_number}")
+    print(f"Current Balance : {balance}")
+
+# Check Balance
+def check_balance():
+    print("\n========Balance=======")
+    print(f"Current Balance : {balance}")
+
+# Deposit Money
+def deposit():
+    global balance
+    amount = float(input("Enter amount to deposit : $"))
+
+    if amount > 0:
+        balance += amount
+
+        transactions.append(
+            f"Deposited ${amount}"
+        )
+        print(f"${amount} deposited successfully!")
+    else:
+        print("Invalid Amount")
+
+# Withdraw Money
+def withdraw():
+    global balance
+
+    amount = float("Enter amount to withdraw : $")
+
+    if amount <= 0:
+        print("Invalid Amount")
+    elif amount > balance:
+        print("Insufficient Balance!")
+    else:
+        balance -= amount
+
+        transactions.append(
+            f"Withdrawn ${amount}"
+        )
+        print(f"{amount} withdrawn successfully!")
+
+# Transaction History
+def transaction_history():
+    print("\n===== TRANSACTION HISTORY =====")
+    
+    if len(transactions) == 0: 
+        print("No transaction found.")
+    else: 
+        for transaction in transactions: 
+            print(transaction)
+    
+# Mini statement 
+def mini_statement():
+    print("\n==== LAST 5 TRANSACTIONS ====")
+    
+    if len(transactions) == 0: 
+        print("No transaction found.")
+    else: 
+        last_transactions = transactions[-5]
+        
+        for transaction in last_transactions: 
+            print(transaction)
+            
+# CHANGE PIN
+def change_pin():
+    global pin
+    
+    old_pin = input("Enter Current PIN : ")
+    
+    if old_pin == pin: 
+        new_pin = input("Enter New PIN : ")
+        pin = new_pin
+        
+        print("PIN Changed Successfully!")
+    else: 
+        print("Incorrect Current PIN!")
+        
+# Homework is Add the forget pin option - via phone/account_number
+    
+
+
+
