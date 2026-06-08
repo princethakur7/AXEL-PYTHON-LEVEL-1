@@ -1,117 +1,335 @@
-# Banking Management System - Consumer
+from datetime import datetime
 
-# account details
+# ==============================
+# ACCOUNT DETAILS
+# ==============================
+
 account_holder = "Prince Thakur"
 account_number = "1234567890"
+phone_number = "9876543210"
+
 balance = 10000
 pin = "1234"
 
-# Transaction History List
 transactions = []
 
-#Login function
-def login():
-    global pin
+# ==============================
+# FILE FUNCTIONS
+# ==============================
 
+def save_transaction(transaction):
+    with open("transactions.txt", "a") as file:
+        file.write(transaction + "\n")
+
+
+def load_transactions():
+    global transactions
+
+    try:
+        with open("transactions.txt", "r") as file:
+            transactions = file.readlines()
+
+        transactions = [t.strip() for t in transactions]
+
+    except FileNotFoundError:
+        transactions = []
+
+
+# ==============================
+# LOGIN
+# ==============================
+
+def login():
     attempts = 3
 
     while attempts > 0:
 
-        entered_pin = input("Enter your 4-digit PIN: ")
+        entered_pin = input("Enter your 4-digit PIN : ")
 
         if entered_pin == pin:
             print("\nLogin Successful!")
             return True
-        else:
-            attempts -=1
-            print(f"Incorrect PIN! Attempts Left: {attempts}")
+
+        attempts -= 1
+        print(f"Incorrect PIN! Attempts Left: {attempts}")
 
     print("\nAccount Locked!")
     return False
 
-#account Details
+
+# ==============================
+# ACCOUNT DETAILS
+# ==============================
+
 def account_details():
-    print("\n==== ACCOUNT DETAILS ====")
+    print("\n===== ACCOUNT DETAILS =====")
+
     print(f"Account Holder : {account_holder}")
     print(f"Account Number : {account_number}")
-    print(f"Current Balance : {balance}")
+    print(f"Balance : ₹{balance}")
 
-# Check Balance
+
+# ==============================
+# CHECK BALANCE
+# ==============================
+
 def check_balance():
-    print("\n========Balance=======")
-    print(f"Current Balance : {balance}")
+    print(f"\nCurrent Balance : ₹{balance}")
 
-# Deposit Money
+
+# ==============================
+# DEPOSIT
+# ==============================
+
 def deposit():
     global balance
-    amount = float(input("Enter amount to deposit : $"))
+
+    amount = float(input("Enter Amount to Deposit : ₹"))
 
     if amount > 0:
+
         balance += amount
 
-        transactions.append(
-            f"Deposited ${amount}"
-        )
-        print(f"${amount} deposited successfully!")
-    else:
-        print("Invalid Amount")
+        transaction = f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] Deposited ₹{amount}"
 
-# Withdraw Money
+        transactions.append(transaction)
+
+        save_transaction(transaction)
+
+        print("Money Deposited Successfully!")
+
+    else:
+        print("Invalid Amount!")
+
+
+# ==============================
+# WITHDRAW
+# ==============================
+
 def withdraw():
     global balance
 
-    amount = float("Enter amount to withdraw : $")
+    amount = float(input("Enter Amount to Withdraw : ₹"))
 
     if amount <= 0:
-        print("Invalid Amount")
+        print("Invalid Amount!")
+
     elif amount > balance:
         print("Insufficient Balance!")
+
     else:
+
         balance -= amount
 
-        transactions.append(
-            f"Withdrawn ${amount}"
-        )
-        print(f"{amount} withdrawn successfully!")
+        transaction = f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] Withdrawn ₹{amount}"
 
-# Transaction History
+        transactions.append(transaction)
+
+        save_transaction(transaction)
+
+        print("Money Withdrawn Successfully!")
+
+
+# ==============================
+# TRANSFER MONEY
+# ==============================
+
+def transfer_money():
+    global balance
+
+    receiver_account = input("Enter Receiver Account Number : ")
+
+    amount = float(input("Enter Amount : ₹"))
+
+    if amount <= 0:
+        print("Invalid Amount!")
+
+    elif amount > balance:
+        print("Insufficient Balance!")
+
+    else:
+
+        balance -= amount
+
+        transaction = (
+            f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] "
+            f"Transferred ₹{amount} to A/C {receiver_account}"
+        )
+
+        transactions.append(transaction)
+
+        save_transaction(transaction)
+
+        print("Transfer Successful!")
+
+
+# ==============================
+# TRANSACTION HISTORY
+# ==============================
+
 def transaction_history():
+
     print("\n===== TRANSACTION HISTORY =====")
-    
-    if len(transactions) == 0: 
-        print("No transaction found.")
-    else: 
-        for transaction in transactions: 
+
+    if len(transactions) == 0:
+        print("No Transactions Found!")
+
+    else:
+        for transaction in transactions:
             print(transaction)
-    
-# Mini statement 
+
+
+# ==============================
+# MINI STATEMENT
+# ==============================
+
 def mini_statement():
-    print("\n==== LAST 5 TRANSACTIONS ====")
-    
-    if len(transactions) == 0: 
-        print("No transaction found.")
-    else: 
-        last_transactions = transactions[-5]
-        
-        for transaction in last_transactions: 
+
+    print("\n===== LAST 5 TRANSACTIONS =====")
+
+    if len(transactions) == 0:
+        print("No Transactions Found!")
+
+    else:
+
+        last_transactions = transactions[-5:]
+
+        for transaction in last_transactions:
             print(transaction)
-            
+
+
+# ==============================
 # CHANGE PIN
+# ==============================
+
 def change_pin():
     global pin
-    
+
     old_pin = input("Enter Current PIN : ")
-    
-    if old_pin == pin: 
+
+    if old_pin == pin:
+
         new_pin = input("Enter New PIN : ")
-        pin = new_pin
-        
-        print("PIN Changed Successfully!")
-    else: 
+
+        if len(new_pin) == 4 and new_pin.isdigit():
+
+            pin = new_pin
+
+            print("PIN Changed Successfully!")
+
+        else:
+            print("PIN Must Be 4 Digits!")
+
+    else:
         print("Incorrect Current PIN!")
-        
-# Homework is Add the forget pin option - via phone/account_number
-    
 
 
+# ==============================
+# FORGOT PIN
+# ==============================
 
+def forgot_pin():
+    global pin
+
+    print("\n===== FORGOT PIN =====")
+
+    acc = input("Enter Account Number : ")
+    phone = input("Enter Registered Phone Number : ")
+
+    if acc == account_number and phone == phone_number:
+
+        new_pin = input("Enter New 4-Digit PIN : ")
+
+        if len(new_pin) == 4 and new_pin.isdigit():
+
+            pin = new_pin
+
+            print("PIN Reset Successfully!")
+
+        else:
+            print("PIN Must Be 4 Digits!")
+
+    else:
+        print("Verification Failed!")
+
+
+# ==============================
+# MENU
+# ==============================
+
+def show_menu():
+
+    print("\n")
+    print("================================")
+    print("      BANKING MANAGEMENT")
+    print("================================")
+    print("1. Account Details")
+    print("2. Check Balance")
+    print("3. Deposit Money")
+    print("4. Withdraw Money")
+    print("5. Transfer Money")
+    print("6. Transaction History")
+    print("7. Mini Statement")
+    print("8. Change PIN")
+    print("9. Forgot PIN")
+    print("10. Logout")
+    print("================================")
+
+
+# ==============================
+# MAIN PROGRAM
+# ==============================
+
+def main():
+
+    load_transactions()
+
+    if login() == False:
+        return
+
+    while True:
+
+        show_menu()
+
+        choice = input("Enter Choice : ")
+
+        if choice == "1":
+            account_details()
+
+        elif choice == "2":
+            check_balance()
+
+        elif choice == "3":
+            deposit()
+
+        elif choice == "4":
+            withdraw()
+
+        elif choice == "5":
+            transfer_money()
+
+        elif choice == "6":
+            transaction_history()
+
+        elif choice == "7":
+            mini_statement()
+
+        elif choice == "8":
+            change_pin()
+
+        elif choice == "9":
+            forgot_pin()
+
+        elif choice == "10":
+            print("\nThank You For Using Our Banking System!")
+            break
+
+        else:
+            print("Invalid Choice! Try Again.")
+
+
+# ==============================
+# START PROGRAM
+# ==============================
+
+main()
