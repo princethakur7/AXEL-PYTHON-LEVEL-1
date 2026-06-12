@@ -1,0 +1,93 @@
+import random
+
+
+# Generate a random question
+def generate_question():
+
+    num1 = random.randint(1, 20)
+    num2 = random.randint(1, 20)
+
+    operator = random.choice(["+", "-", "*", "/"])
+
+    if operator == "+":
+        answer = num1 + num2
+
+    elif operator == "-":
+        answer = num1 - num2
+
+    elif operator == "*":
+        answer = num1 * num2
+
+    else:
+        # Make division clean
+        answer = num1
+        num1 = num1 * num2
+
+    question = f"{num1} {operator} {num2}"
+
+    return question, answer
+
+
+# Check user's answer
+def check_answer(user_answer, correct_answer):
+
+    return user_answer == correct_answer
+
+
+# Show final score
+def show_score(score, total_questions):
+
+    print("\n===== FINAL RESULT =====")
+
+    print(f"Total Questions : {total_questions}")
+    print(f"Correct Answers : {score}")
+    print(f"Wrong Answers   : {total_questions - score}")
+
+    percentage = (score / total_questions) * 100
+
+    print(f"Score Percentage: {percentage}%")
+
+    if score >= 9:
+        print("Grade: Excellent 🌟")
+
+    elif score >= 7:
+        print("Grade: Very Good 👍")
+
+    elif score >= 5:
+        print("Grade: Good 🙂")
+
+    else:
+        print("Grade: Keep Practicing 💪")
+
+
+# Main Game
+def main():
+
+    score = 0
+    total_questions = 10
+
+    print("=================================")
+    print("      MATH CHALLENGE GAME")
+    print("=================================")
+
+    for i in range(total_questions):
+
+        print(f"\nQuestion {i + 1}")
+
+        question, answer = generate_question()
+
+        user_answer = float(input(f"{question} = "))
+
+        if check_answer(user_answer, answer):
+
+            print("✅ Correct!")
+            score += 1
+
+        else:
+            print("❌ Wrong!")
+            print(f"Correct Answer: {answer}")
+
+    show_score(score, total_questions)
+
+
+main()
