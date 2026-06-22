@@ -1,0 +1,147 @@
+# Hotel Management System
+
+class Customer:
+    def __init__(self, name, phone): #ID card part do as homework
+        self.name = name
+        self.phone = phone
+
+    #Display customer details
+    def show_customer(self):
+        print(f"Customer Name : {self.name}")
+        print(f"Phone NUmber : {self.phone}")
+
+# Room class - stores room information
+class Room:
+    def __init__(self, room_number, room_type, price):
+        self.room_number = room_number
+        self.room_type = room_type
+        self.price = price
+
+        # Room is available when created
+        self.is_booked = False
+
+        # No customer assigned initially
+        self.customer = None
+
+    #Book the room
+    def book_room(self, customer):
+
+        if self.is_booked:
+            print("❌ Room is already booked!")
+        else:
+            self.is_booked = True
+            self.customer = customer
+
+            print("\n✅ Room Booked Successfully!")
+            print(f"Room Number : {self.room_number}")
+            print(f"Customer : {customer.name}")
+
+    # Checkout room
+    def checkout_room(self):
+        if not self.is_booked:
+            print("❌ Room is already empty!")
+        else:
+            print(f"\n✅ {self.customer.name} has checked out")
+
+    # Display room information
+    def show_room(self):
+        status = "Booked" if self.is_booked else "Available"
+
+        print("------------------------------------")
+        print(f"Room Number : {self.room_number}")
+        print(f"Room Type   : {self.room_type}")
+        print(f"Price       : {self.price}")
+        print(f"Status      : {status}")
+
+
+ #Hotel class - manages all hotel operations
+class Hotel:
+    def __init__(self, hotel_name):
+        self.hotel_name = hotel_name
+
+        #List to store all the room objects
+        self.rooms = []
+
+    # Add Room to hotel
+    def add_room(self,room):
+        self.rooms.append(room)
+
+    # Show Hotel Details
+    def show_hotel_details(self):
+        total_rooms = len(self.rooms)
+
+        available_rooms = 0
+
+        for room in self.rooms:
+            if not room.is_booked:
+                available_rooms += 1
+
+        print("\n=======================")
+        print(f"Welcome to {self.hotel_name}")
+        print("==========================")
+        print(f"Total Rooms     : {total_rooms}")
+        print(f"Available Rooms : {available_rooms}")
+
+    #Show all available rooms
+    def show_available_rooms(self):
+        print("\nAVAILABLE ROOMS")
+
+        found = False
+
+        for room in self.rooms:
+            if not room.is_booked:
+                room.show_room()
+                found = True
+
+        if not found:
+            print("No rooms available")
+
+
+    #Book Room
+    def book_room(self):
+        room_number = int(input("\n Enter Room Number : "))
+
+        for room in self.rooms:
+            if room.room_number == room_number:
+                if room.is_booked:
+                    print("Room already booked!")
+                    return
+
+                name = input("Enter customer Name : ")
+                phone = input("Enter Phone Number : ")
+
+                customer = Customer(name,phone)
+
+                room.book_room(customer)
+                return
+
+            print("Room not found")
+
+    #Show all bookings
+    def show_bookings(self):
+        print("\nCURRENT BOOKINGS")
+        found = False
+
+        for room in self.rooms:
+            if room.is_booked:
+                print(("------------------------"))
+                print(f"Customer : {room.room_number}")
+                print(f"Customer : {room.customer.name}")
+                print(f"Phone : {room.customer.phone}")
+
+                found = True
+
+            if not found:
+                print("No bookings found.")
+
+    # Checked roon
+    def checkout_room(self):
+        room_number = int(input("\nEnter Room Number : "))
+        for room in self.rooms:
+            if room.room_number == room_number:
+                room.checkout_room()
+                return
+
+        print("❌Room not found!")
+
+    
