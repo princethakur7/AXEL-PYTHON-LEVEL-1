@@ -1,17 +1,31 @@
-# Hotel Management System
+# ==========================================
+# HOTEL MANAGEMENT SYSTEM
+# Created for Learning Classes and Objects
+# ==========================================
 
+
+# ------------------------------------------
+# CUSTOMER CLASS
+# Stores customer information
+# ------------------------------------------
 class Customer:
-    def __init__(self, name, phone): #ID card part do as homework
+
+    def __init__(self, name, phone):
         self.name = name
         self.phone = phone
 
-    #Display customer details
+    # Display customer details
     def show_customer(self):
         print(f"Customer Name : {self.name}")
-        print(f"Phone NUmber : {self.phone}")
+        print(f"Phone Number  : {self.phone}")
 
-# Room class - stores room information
+
+# ------------------------------------------
+# ROOM CLASS
+# Stores room information
+# ------------------------------------------
 class Room:
+
     def __init__(self, room_number, room_type, price):
         self.room_number = room_number
         self.room_type = room_type
@@ -23,51 +37,64 @@ class Room:
         # No customer assigned initially
         self.customer = None
 
-    #Book the room
+    # Book the room
     def book_room(self, customer):
 
         if self.is_booked:
             print("❌ Room is already booked!")
+
         else:
             self.is_booked = True
             self.customer = customer
 
             print("\n✅ Room Booked Successfully!")
             print(f"Room Number : {self.room_number}")
-            print(f"Customer : {customer.name}")
+            print(f"Customer    : {customer.name}")
 
     # Checkout room
     def checkout_room(self):
+
         if not self.is_booked:
             print("❌ Room is already empty!")
+
         else:
-            print(f"\n✅ {self.customer.name} has checked out")
+            print(f"\n✅ {self.customer.name} has checked out.")
+
+            self.is_booked = False
+            self.customer = None
 
     # Display room information
     def show_room(self):
+
         status = "Booked" if self.is_booked else "Available"
 
-        print("------------------------------------")
+        print("--------------------------------")
         print(f"Room Number : {self.room_number}")
         print(f"Room Type   : {self.room_type}")
-        print(f"Price       : {self.price}")
+        print(f"Price       : ₹{self.price}")
         print(f"Status      : {status}")
 
 
- #Hotel class - manages all hotel operations
+# ------------------------------------------
+# HOTEL CLASS
+# Manages all hotel operations
+# ------------------------------------------
 class Hotel:
+
     def __init__(self, hotel_name):
+
         self.hotel_name = hotel_name
 
-        #List to store all the room objects
+        # List to store all room objects
         self.rooms = []
 
-    # Add Room to hotel
-    def add_room(self,room):
+    # Add room to hotel
+    def add_room(self, room):
         self.rooms.append(room)
 
-    # Show Hotel Details
+    # Show hotel details
     def show_hotel_details(self):
+
         total_rooms = len(self.rooms)
 
         available_rooms = 0
@@ -76,72 +103,183 @@ class Hotel:
             if not room.is_booked:
                 available_rooms += 1
 
-        print("\n=======================")
-        print(f"Welcome to {self.hotel_name}")
-        print("==========================")
-        print(f"Total Rooms     : {total_rooms}")
-        print(f"Available Rooms : {available_rooms}")
+        print("\n==============================")
+        print(f"🏨 Welcome to {self.hotel_name}")
+        print("==============================")
+        print(f"Total Rooms      : {total_rooms}")
+        print(f"Available Rooms  : {available_rooms}")
 
-    #Show all available rooms
+    # Show all available rooms
     def show_available_rooms(self):
+
         print("\nAVAILABLE ROOMS")
 
         found = False
 
         for room in self.rooms:
+
             if not room.is_booked:
                 room.show_room()
                 found = True
 
         if not found:
-            print("No rooms available")
+            print("No rooms available.")
 
-
-    #Book Room
+    # Book room
     def book_room(self):
-        room_number = int(input("\n Enter Room Number : "))
+
+        room_number = int(input("\nEnter Room Number: "))
 
         for room in self.rooms:
+
             if room.room_number == room_number:
+
                 if room.is_booked:
-                    print("Room already booked!")
+                    print("❌ Room already booked!")
                     return
 
-                name = input("Enter customer Name : ")
-                phone = input("Enter Phone Number : ")
+                name = input("Enter Customer Name: ")
+                phone = input("Enter Phone Number: ")
 
-                customer = Customer(name,phone)
+                customer = Customer(name, phone)
 
                 room.book_room(customer)
                 return
 
-            print("Room not found")
+        print("❌ Room not found!")
 
-    #Show all bookings
+    # Show all bookings
     def show_bookings(self):
+
         print("\nCURRENT BOOKINGS")
+
         found = False
 
         for room in self.rooms:
+
             if room.is_booked:
-                print(("------------------------"))
-                print(f"Customer : {room.room_number}")
-                print(f"Customer : {room.customer.name}")
-                print(f"Phone : {room.customer.phone}")
+
+                print("--------------------------------")
+                print(f"Room Number : {room.room_number}")
+                print(f"Customer    : {room.customer.name}")
+                print(f"Phone       : {room.customer.phone}")
 
                 found = True
 
-            if not found:
-                print("No bookings found.")
+        if not found:
+            print("No bookings found.")
 
-    # Checked roon
+    # Checkout room
     def checkout_room(self):
-        room_number = int(input("\nEnter Room Number : "))
+
+        room_number = int(input("\nEnter Room Number: "))
+
         for room in self.rooms:
+
             if room.room_number == room_number:
                 room.checkout_room()
                 return
 
-        print("❌Room not found!")
+        print("❌ Room not found!")
 
-    
+    # Generate bill
+    def generate_bill(self):
+
+        room_number = int(input("\nEnter Room Number: "))
+
+        for room in self.rooms:
+
+            if room.room_number == room_number:
+
+                if room.is_booked:
+
+                    days = int(input("Enter Number of Days Stayed: "))
+
+                    total_bill = room.price * days
+
+                    print("\n========== BILL ==========")
+                    print(f"Customer Name : {room.customer.name}")
+                    print(f"Room Number   : {room.room_number}")
+                    print(f"Room Type     : {room.room_type}")
+                    print(f"Price Per Day : ₹{room.price}")
+                    print(f"Days Stayed   : {days}")
+                    print("--------------------------")
+                    print(f"Total Bill    : ₹{total_bill}")
+                    print("==========================")
+
+                    return
+
+                else:
+                    print("❌ Room is not booked.")
+                    return
+
+        print("❌ Room not found!")
+
+
+# ==========================================
+# MAIN PROGRAM
+# ==========================================
+
+# Create Hotel Object
+hotel = Hotel("Prince Grand Hotel")
+
+# Create Room Objects
+room1 = Room(101, "Standard", 1500)
+room2 = Room(102, "Deluxe", 2500)
+room3 = Room(103, "Suite", 5000)
+room4 = Room(104, "Deluxe", 2500)
+room5 = Room(105, "Standard", 1500)
+
+# Add rooms to hotel
+hotel.add_room(room1)
+hotel.add_room(room2)
+hotel.add_room(room3)
+hotel.add_room(room4)
+hotel.add_room(room5)
+
+
+# ==========================================
+# MENU LOOP
+# ==========================================
+
+while True:
+
+    print("\n")
+    print("=" * 40)
+    print("      HOTEL MANAGEMENT SYSTEM")
+    print("=" * 40)
+
+    print("1. View Hotel Details")
+    print("2. View Available Rooms")
+    print("3. Book Room")
+    print("4. View Bookings")
+    print("5. Checkout Room")
+    print("6. Generate Bill")
+    print("7. Exit")
+
+    choice = input("\nEnter Your Choice: ")
+
+    if choice == "1":
+        hotel.show_hotel_details()
+
+    elif choice == "2":
+        hotel.show_available_rooms()
+
+    elif choice == "3":
+        hotel.book_room()
+
+    elif choice == "4":
+        hotel.show_bookings()
+
+    elif choice == "5":
+        hotel.checkout_room()
+
+    elif choice == "6":
+        hotel.generate_bill()
+
+    elif choice == "7":
+        print("\n🙏 Thank you for visiting Prince Grand Hotel!")
+        break
+
+    else:
+        print("❌ Invalid Choice! Please try again.")
