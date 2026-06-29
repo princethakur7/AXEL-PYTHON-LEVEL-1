@@ -1,0 +1,19 @@
+import random
+
+#Car Class
+class Car:
+    def __init__(self, brand):
+        self.brand = brand
+        self.speed = 0
+        self.fuel = 100
+        self.distance = 0
+
+    #Increase speed
+    def accelerate(self):
+        increase = random.randint(10,30)
+        self.speed += increase
+        
+        print(f"{self.brand} accelerated by {increase} km/h")
+        print(f"Current Speed : {self.speed} km/h")
+        
+    # Reduce speed ?
