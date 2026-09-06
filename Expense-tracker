@@ -1,0 +1,84 @@
+from datetime import datetime
+
+expenses = []
+budget = 0
+
+# Generate Expense_ID
+def generate_id():
+    if len(expenses) == 0:
+        return 1
+
+    return expenses[-1]["id"]+1
+
+# Display Main Menu
+def show_menu():
+    print("1. Add Expense")
+    print("2. View All Expense")
+    print("3. Search expense")
+    print("4. Filter by Expense")
+    print("5. Delete Expense")
+    print("6. Expense Summary")
+    print("7. Category-wise Summary")
+    print("8. Set Monthly Budget")
+    print("9. Budget Status")
+    print("10. Exit")
+
+# Get Valid Amount
+def get_amount():
+    while True:
+        try:
+            amount = float(input("Enter amount : $"))
+
+            if amount <= 0:
+                print("Amount must be greater than 0")
+            else:
+                return amount
+        except ValueError:
+            print("Please enter a valid number")
+
+
+# Get Expense Date
+def get_date():
+    while True:
+        date = input("Enter date (DD-MM-YYYY): ")
+
+        try:
+            datetime.strptime(date,"%d-%m-%y")
+            return date
+        except ValueError:
+            print("Invalid date formate")
+            print("Please use DD-MM-YYYY.")
+
+
+# add expense
+def add_expense():
+    print("\n--------- ADD EXPENSE -------")
+    title = input("Enter expense title : ").strip()
+
+    if title == "":
+        print("Title cannot be empty.")
+        return
+
+    amount = get_amount()
+    category = input("Enter Category : ").strip()
+
+    if category == "":
+        print("category cannot be empty.")
+        return
+
+    date = get_date()
+
+    expense = {
+        "id": generate_id(),
+        "title": title,
+        "amount":amount,
+        "category":category,
+        "date":date
+    }
+    expenses.append(expense)
+
+    print("\nExpense added successfully!")
+    print("Expense ID:", expense["id"])
+
+# homework is to add  print("3. Search expense")
+
